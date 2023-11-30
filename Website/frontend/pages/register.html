@@ -1,0 +1,49 @@
+<!-- FILEPATH: /home/codecubes/Bureau/I.C.A.R.E/Website/frontend/pages/register.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register</title>
+    <link rel="stylesheet" href="/styles/loginregister.css">
+    <link rel="stylesheet" href="/styles/basics.css">
+</head>
+<body>
+
+        <div class="page">
+            <div class="header">
+                <div class="logo">
+                    <a href="/"><img src="/images/logo2.png" alt="logo"></a>
+                </div>
+            </div>
+            <div class="content">
+    
+                <div class="box">
+                    <h2>Register</h2>
+                    <form action="register.php" method="POST">
+                        <div class="form-group">
+                            <label for="username">Username:</label>
+                            <input type="text" id="username" name="username" required placeholder="Enter your username">
+                        </div>
+                        <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" required placeholder="Enter your email">
+                        </div>
+                        <div class="form-group">
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" name="password" required placeholder="Enter your password">
+                        </div>
+                        <div class="form-group">
+                            <button type="submit">Register</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <script src="/js/login.js"></script>
+        <script src="/js/basics.js"></script>
+    </body>
+    </html>
+    
+   
+</body>
+</html>

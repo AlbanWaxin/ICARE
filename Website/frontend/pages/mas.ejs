@@ -1,0 +1,19 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My EJS Page</title>
+</head>
+<body>
+    <h1>List of JSON Data</h1>
+    <ul>
+        <% data.forEach(function(item) { %>
+            <li><%= item.name %></li>
+        <% }); %>
+    </ul>
+    <script>
+        var data = <%- JSON.stringify(data) %>;
+    </script>
+    <script src="/js/mas.js"></script>
+</body>
+</html>

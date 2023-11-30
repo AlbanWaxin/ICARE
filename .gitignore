@@ -1,0 +1,10 @@
+ICARE/
+node_modules/
+images/*
+*.json
+!package.json
+!package-lock.json
+MAS_links.txt
+__pycache__/
+*.txt
+tests/
