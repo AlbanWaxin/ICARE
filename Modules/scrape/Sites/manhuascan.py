@@ -64,10 +64,11 @@ class ManhuaScan_Scrapper(Scraper):
     def format_chapter_list(self):
         for chapter in self.chapter_list:
             #print(chapter)
-            if not chapter['chapter'].lower().startswith('chapter'):
-                index = chapter['chapter'].find('-')
-                number = chapter['chapter'][index+2:]
-                self.chapter_list[self.chapter_list.index(chapter)]['chapter'] = number
+            parts = chapter['chapter'].split("-")
+            value = parts[len(parts)-1]
+            if not value.lower().startswith('chapter'):
+                value = "Chapter " + ''.join(re.findall(r'\d+', value))
+            self.chapter_list[self.chapter_list.index(chapter)]['chapter'] = value
         return 2001
     
     def get_image(self):

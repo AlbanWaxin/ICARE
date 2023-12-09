@@ -2,18 +2,65 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>My EJS Page</title>
+    <title>MAS</title>
+    <link rel="stylesheet" href="/styles/mas.css">
+    <link rel="stylesheet" href="/styles/basics.css">
 </head>
 <body>
-    <h1>List of JSON Data</h1>
-    <ul>
-        <% data.forEach(function(item) { %>
-            <li><%= item.name %></li>
-        <% }); %>
-    </ul>
+    <div class="page">
+        <div class="header">
+            <div class="logo">
+                <a href="/"><img src="/images/logo2.png" alt="logo"></a>
+            </div>
+        </div>
+        <div class="navbar">
+            <div class="navbar-item">
+                <a href="/mas">
+                    MAS
+                </a>
+            </div>
+            <div class="navbar-item">
+                <a href="/mhc">
+                    MHC
+                </a>
+            </div>
+            <div class="navbar-item">
+                <a href="/mgc">
+                    MGC
+                </a>
+            </div>
+            <div class="navbar-item">
+                <a href="/mrs">
+                    MRS
+                </a>
+            </div>
+            <div class="navbar-item">
+                <a href="/mtw">
+                    MTW
+                </a>
+            </div>
+            <div class="navbar-item">
+                <a href="/mas">
+                    MAS
+                </a>
+            </div>
+        </div>
+        <div class="content">
+            <div class="cards">
+                <div class="not_up_to_date"></div>
+                <div class="up_innactive"></div>
+                <div class="up_to_date"></div>
+                <div class="innactive"></div>
+                <div class="finished"></div>
+                <div class="dropped"></div>
+            </div>
+        </div>
+    </div>
+    
     <script>
         var data = <%- JSON.stringify(data) %>;
     </script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="/js/mas.js"></script>
 </body>
 </html>

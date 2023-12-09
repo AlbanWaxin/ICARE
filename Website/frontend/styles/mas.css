@@ -1,0 +1,96 @@
+.cards{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+    padding: 10px;
+}
+
+.innactive{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width : 100%;
+    padding-bottom: 1%;
+}
+
+.dropped{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width : 100%;
+    padding-bottom: 1%;
+}
+
+.finished{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width : 100%;
+    padding-bottom: 1%;
+    
+}
+
+.up_innactive{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width : 100%;
+    padding-bottom: 1%;
+}
+
+.up_to_date{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width : 100%;
+    padding-bottom: 1%;
+}
+
+.not_up_to_date{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width : 100%;
+    padding-bottom: 1%;
+}
+
+.card{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    min-width: 300px;
+    width: 10%;
+    max-height: 10%;    
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    background-color: #6c6d6f;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.card-img-top{
+    border-radius: 10px;
+    width: 25%;
+    height: 100%;
+    max-height: 200px;
+    object-fit: fill;
+}
+
+.card-body{
+    display: flex;
+    flex-direction: column;
+    width: auto;
+    height: 100%;
+    padding: 10px;
+}
+.card-title{
+    width: auto;
+    font-size: 1em;
+    font-weight: bold;
+    color: #fff;
+}

@@ -23,11 +23,7 @@ app.use(bodyParser.json());
 app.use(express.static("frontend"));
 
 function isAuthenticated(req, res, next) {
-  if (req.session && req.session.user) {
-    return next();
-  } else {
-    return res.redirect("/login");
-  }
+  return req.session && req.session.user;
 }
 
 pathtopages = "frontend/pages/";
@@ -36,7 +32,7 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, pathtopages + "accueil.html"));
 });
 
-app.get("/main", isAuthenticated, (req, res) => {
+app.get("/main", (req, res) => {
   res.sendFile(path.join(__dirname, pathtopages + "main.html"));
 });
 
@@ -61,14 +57,18 @@ app.post("/login", async (req, res) => {
     } else if (response.status === 205) {
       return res.redirect("/login");
     } else {
-      redirect("/");
+      return res.redirect("/");
     }
   }
 });
 
 app.get("/mas", async (req, res) => {
+  // if (!isAuthenticated(req, res)) {
+  //   return res.redirect("/login");
+  // }
   const response = await axios.get(
-    "http://localhost:6000/mas?user=" + req.session.user.name
+    // "http://localhost:6000/mas?user=" + req.session.user.name
+    "http://localhost:6000/mas?user=" + "CodeCubes"
   );
   webtoons = [];
   response.data.forEach((element) => {
