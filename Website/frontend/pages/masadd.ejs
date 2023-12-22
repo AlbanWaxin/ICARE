@@ -41,9 +41,9 @@
             <button
               type="button"
               class="btn btn-dark font"
-              onclick="location.href='/mas/add'"
+              onclick="location.href='/mas'"
             >
-              Add
+              Return
             </button>
             <button type="button" onclick="location.href='/logout'" class="btn btn-dark font">Log-out</button>
           </div>
@@ -51,9 +51,9 @@
             <button
               type="button"
               class="btn btn-dark font fs-2"
-              onclick="location.href='/mas/add'"
+              onclick="location.href='/mas'"
             >
-              Add
+              Return
             </button>
             <button type="button" onclick="location.href='/logout'" class="btn btn-dark font fs-2">
               Log-out
@@ -62,44 +62,57 @@
         </div>
       </div>
     </header>
-    <div class="justify-content-start d-flex fond">
-      <div class="d-flex flex-column">
-        <div class="not_up_to_date row justify-content-start mx-2 mb-2">
-          <div class="col-12">
-            <h1 class="text-center text-white mt-4 mb-4">Not up to date</h1>
-          </div>
-        </div>
-        <div class="up_innactive row flex-wrap justify-content-start mx-2 mb-2">
-          <div class="col-12">
-            <h1 class="text-center text-white mt-4 mb-4">
-              No Recent Update / To Read
-            </h1>
-          </div>
-        </div>
-        <div class="up_to_date row flex-wrap justify-content-start mx-2 mb-2">
-          <div class="col-12">
-            <h1 class="text-center text-white mt-4 mb-4">Up to date</h1>
-          </div>
-        </div>
-        <div class="innactive row flex-wrap justify-content-start mx-2 mb-2">
-          <div class="col-12">
-            <h1 class="text-center text-white mt-4 mb-4">No Recent Update</h1>
-          </div>
-        </div>
-        <div class="finished row flex-wrap justify-content-start mx-2 mb-2">
-          <div class="col-12">
-            <h1 class="text-center text-white mt-4 mb-4">Finished</h1>
-          </div>
-        </div>
-        <div class="dropped row flex-wrap justify-content-start mx-2 mb-2">
-          <div class="col-12">
-            <h1 class="text-center text-white mt-4 mb-4">Dropped</h1>
+    <div
+      class="justify-content-center d-flex fond"
+      style="height: calc(100vh - 94px)"
+    >
+      <div class="col-12 col-sm-12 col-md-8 col-lg-6 col-xl-5 my-5">
+        <div class="card bg-dark text-white">
+          <div class="card-body p-5">
+            <p
+              class="text-uppercase text-center mb-5 d-sm-none d-lg-block fs-2"
+            >
+              Add
+            </p>
+            <p
+              class="text-uppercase text-center mb-5 d-lg-none d-sm-block fs-1"
+            >
+              Login
+            </p>
+            <form action="/mas/add" method="post">
+              <div class="form-outline mb-4" id="form">
+                <input
+                  type="text"
+                  id="1"
+                  name="link1"
+                  class="form-control form-control-lg my-2"
+                  placeholder="Enter a link"
+                />
+              </div>
+              <div class="d-flex justify-content-center align-items-center">
+                <button
+                  type="button"
+                  class="btn btn-primary btn-lg px-4 font rounded-circle align-content-center justify-content-center fs-3 mx-4"
+                  style="background-color: #7156fd; -color: #f0ad4e"
+                  id="add"
+                >
+                  +
+                </button>
+                <button
+                  type="submit"
+                  class="btn btn-primary btn-lg px-5"
+                  style="background-color: #7156fd; -color: #f0ad4e"
+                >
+                  Add
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
     </div>
-
     <script>
+        var followed = <%- JSON.stringify(followed) %>;
       var data = <%- JSON.stringify(data) %>;
     </script>
     <script
@@ -108,6 +121,6 @@
       crossorigin="anonymous"
     ></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script src="/js/mas.js"></script>
+    <script src="/js/masadd.js"></script>
   </body>
 </html>

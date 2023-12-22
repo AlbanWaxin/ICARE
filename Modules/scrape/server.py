@@ -95,7 +95,7 @@ def add_webtoons():
         return 'You are not allowed to contact me',403
     else:
         if len(request.data) == 0: return 'No data', 400
-        url_list = json.loads(request.data.decode("utf-8"))[0]['url_list']
+        url_list = json.loads(request.data.decode("utf-8"))['url_list']
         if url_list == None: return 'No url', 400
         results = [2001] * len(url_list)
         for url in url_list:
