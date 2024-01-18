@@ -66,7 +66,7 @@ def register():
 def mas():  
     params = request.args
     print(params)
-    user_mas = get_mas_files(params['user'])
+    user_mas = get_files(params['user'],"MAS")
     return user_mas, 200
 
 @app.route('/mas/add/', methods=['POST'])
@@ -83,7 +83,13 @@ def add():
             with open( "./mas/" + data_json['user'] + '_MAS.json', 'r') as f:
                 mas = json.load(f)
                 for obj in objects:
-                    mas.append(obj)
+                    present = False
+                    for data in mas:
+                        if not ("url" in data and data["url"] == obj["url"]):
+                            present = True
+                            break
+                    if not present:        
+                        mas.append(obj)
                 with open( "./mas/" + data_json['user'] + '_MAS.json', 'w') as f:
                     json.dump(mas, f)
                     return 'Done',200
@@ -198,7 +204,59 @@ def set_undrop():
             return 4103
         except:
             return 4100
+        
+@app.route('/riot/follow', methods=['GET'])
+def riot_follow():
+    if check_origin(request):
+        return 'You are not allowed to contact me',403
+    else:
+        params = request.args
+        return json.dumps(get_files(params['user'],"RIOT")),200
 
+@app.route('/riot/add_follow', methods=['POST'])
+def riot_add():
+    if check_origin(request):
+        return 'You are not allowed to contact me',403
+    else:
+        data = request.data.decode('utf-8')
+        data_json = json.loads(data)
+        try:
+            with open( "./riot/" + data_json['user'] + '_RIOT.json', 'r') as f:
+                riot = json.load(f)
+                for player in json.loads(data_json['riot']):
+                    present = False
+                    for data in riot:
+                        if ("puuid" in data and data["puuid"] == player["puuid"]):
+                            present = True
+                            break
+                    if not present:
+                        riot.append(player)
+                with open( "./riot/" + data_json['user'] + '_RIOT.json', 'w') as f:
+                    json.dump(riot, f)
+                    return 'Done',200
+        except FileNotFoundError:
+            print("File not found")
+            return 4103
+        except:
+            print("Error")
+            return 4100
+        
+@app.route('/riot/start_follow', methods=['POST'])
+def start_follow():
+    if check_origin(request):
+        return 'You are not allowed to contact me',403
+    else:
+        data = request.data.decode('utf-8')
+        data_json = json.loads(data)
+        riot = json.loads(data_json['riot'])
+        try:
+            with open( "./riot/" + data_json['user'] + '_RIOT.json', 'w') as f:
+                    json.dump([riot], f)
+                    return 'Done',200
+        except FileNotFoundError:
+            return 4103
+        except:
+            return 4100
 
 def read_user_file(username, password):
     try :
@@ -213,17 +271,17 @@ def read_user_file(username, password):
     except:
         return 4100
 
-def get_mas_files(username):
+def get_files(username,file):
     try :
-        with open( "./mas/" + username + '_MAS.json', 'r') as f:
+        with open( "./"+ file.lower() +"/" + username + '_'+ file +'.json', 'r') as f:
             mas = json.load(f)
             return mas
     except FileNotFoundError:
-        with open( "./mas/" + username + '_MAS.json', 'w') as f:
+        with open( "./"+ file.lower() +"/" + username + '_'+file+'.json', 'w') as f:
             json.dump([], f)
             return []
     except:
-        return 4100          
+        return 4100
 
 
 if __name__ == '__main__':

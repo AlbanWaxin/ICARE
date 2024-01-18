@@ -63,9 +63,9 @@ class ManhuaScan_Scrapper(Scraper):
     
     def format_chapter_list(self):
         for chapter in self.chapter_list:
-            #print(chapter)
-            parts = chapter['chapter'].split("-")
-            value = parts[len(parts)-1]
+            pattern = r"(Chapter\s+\d+\.*\d*)?"
+            matches = re.findall(pattern, chapter['chapter'])
+            value = ''.join(matches)
             if not value.lower().startswith('chapter'):
                 value = "Chapter " + ''.join(re.findall(r'\d+', value))
             self.chapter_list[self.chapter_list.index(chapter)]['chapter'] = value

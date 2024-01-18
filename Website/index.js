@@ -39,6 +39,9 @@ app.get("/", (req, res) => {
 });
 
 app.get("/main", (req, res) => {
+  if (!isAuthenticated(req, res)) {
+    return res.redirect("/login");
+  }
   res.render(path.join(__dirname, pathtopages + "main"), { data: req.session.user.name });
 });
 
@@ -49,6 +52,8 @@ app.get("/login", (req, res) => {
 app.get("/register", (req, res) => {
   res.sendFile(path.join(__dirname, pathtopages + "register.html"));
 });
+
+
 
 app.post("/login", async (req, res) => {
   if (req.body.username && req.body.password) {
