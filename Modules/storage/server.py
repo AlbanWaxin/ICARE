@@ -69,7 +69,7 @@ def mas():
     user_mas = get_files(params['user'],"MAS")
     return user_mas, 200
 
-@app.route('/mas/add/', methods=['POST'])
+@app.route('/mas/add', methods=['POST'])
 def add():
     if check_origin(request):
         return 'You are not allowed to contact me',403
@@ -85,7 +85,7 @@ def add():
                 for obj in objects:
                     present = False
                     for data in mas:
-                        if not ("url" in data and data["url"] == obj["url"]):
+                        if not ("url" in data and data["url"] != obj["url"]):
                             present = True
                             break
                     if not present:        
@@ -255,6 +255,20 @@ def start_follow():
                     return 'Done',200
         except FileNotFoundError:
             return 4103
+        except:
+            return 4100
+        
+@app.route('/riot/is_registered', methods=['GET'])
+def is_registered():
+    if check_origin(request):
+        return 'You are not allowed to contact me',403
+    else:
+        params = request.args
+        try:
+            with open( "./riot/" + params['user'] + '_RIOT.json', 'r') as f:
+                return 'Registered',200
+        except FileNotFoundError:
+            return 'Not registered',200
         except:
             return 4100
 

@@ -104,8 +104,18 @@ def login():
 def register():
     params = request.data.decode('utf-8')
     res = requests.post(local + storage + "/register", data=params)
-    print(res.status_code)
     return str(res.status_code), 205 if res.status_code == 205 else 200
+
+@app.route('/riot/is_registered', methods=['GET'])
+def is_registered():
+    params = request.args
+    res = requests.get(local + storage + "/riot/is_registered", params=params)
+    if res.text == 'Registered':
+        print('Registered')
+        return 'Registered', 200
+    else:
+        print('Not Registered')
+        return 'Not Registered', 404
 
 @app.route('/riot/get_followed', methods=['GET'])
 def followed():
@@ -127,13 +137,14 @@ def start_follow():
 @app.route('/riot/add_follow', methods=['POST'])
 def add_follow():
     params = json.loads(request.data.decode('utf-8'))
-    print(params[0]['list'])
+    print(params)
+    print(params['list'])
     players = []
-    for player in range(len(params[0]['list'])):
-        players.append({"player": params[0]['list'][player]["player" + str(player + 1)]})
+    for player in range(len(params['list'])):
+        players.append({"player": params['list'][player]["player" + str(player + 1)]})
     print(players)
     res = requests.post(local + riot + "/add_follow", data=json.dumps(players))
-    res = requests.post(local + storage + "/riot/add_follow", data=json.dumps({'user':params[0]['user'],'riot':res.text}))
+    res = requests.post(local + storage + "/riot/add_follow", data=json.dumps({'user':params['user'],'riot':res.text}))
     return str(res.status_code), 200
 
 

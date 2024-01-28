@@ -18,14 +18,14 @@ app.use(
 );
 
 app.set("view engine", "ejs");
-  
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 //files accessible for the front page
 app.use(express.static("frontend"));
-  
+
 function hashData(data) {
-    return crypto.createHash('sha256').update(data).digest('hex');
+  return crypto.createHash('sha256').update(data).digest('hex');
 }
 
 function isAuthenticated(req, res, next) {
@@ -38,11 +38,27 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, pathtopages + "accueil.html"));
 });
 
-app.get("/main", (req, res) => {
+app.get("/main", async (req, res) => {
   if (!isAuthenticated(req, res)) {
     return res.redirect("/login");
   }
-  res.render(path.join(__dirname, pathtopages + "main"), { data: req.session.user.name });
+  const response = await axios.get(
+    "http://localhost:6000/riot/is_registered?user=" + req.session.user.name
+    // "http://localhost:6000/mas?user=" + "CodeCubes"
+  );
+  if (response.status === 200) {
+    const followed = await axios.get(
+      "http://localhost:6000/riot/get_followed?user=" + req.session.user.name
+    );
+    let follows = [];
+    for (const tracked in followed.data) {
+      follows.push(followed.data[tracked]);
+    }
+    res.render(path.join(__dirname, pathtopages + "main"), { data: req.session.user.name, followed: follows });
+  }
+  else {
+    res.render(path.join(__dirname, pathtopages + "main"), { data: req.session.user.name, followed: [] });
+  }
 });
 
 app.get("/login", (req, res) => {
@@ -52,8 +68,6 @@ app.get("/login", (req, res) => {
 app.get("/register", (req, res) => {
   res.sendFile(path.join(__dirname, pathtopages + "register.html"));
 });
-
-
 
 app.post("/login", async (req, res) => {
   if (req.body.username && req.body.password) {
@@ -111,6 +125,24 @@ app.get("/mas/add", async (req, res) => {
   });
 });
 
+app.get("/riot/add", async (req, res) => {
+  if (!isAuthenticated(req, res)) {
+    return res.redirect("/login");
+  }
+  let response = await axios.get(
+    "http://localhost:6000/riot/get_followed?user=" + req.session.user.name
+    // "http://localhost:6000/mas?user=" + "CodeCubes"
+  );
+  let follows = [];
+  for (const tracked in response.data) {
+    follows.push(response.data[tracked].name);
+  }
+  res.render(path.join(__dirname, pathtopages + "riotadd"), {
+    followed: follows,
+    data: req.session.user.name,
+  });
+});
+
 app.get("/logout", (req, res) => {
   req.session.destroy();
   return res.redirect("/login");
@@ -129,6 +161,22 @@ app.post("/mas/add", async (req, res) => {
   });
   return res.redirect("/mas");
 });
+
+app.post("/riot/add", async (req, res) => {
+  let list = [];
+  let count = 1;
+  console.log(req.body);
+  for (var key in req.body) {
+    list.push({[key] : req.body[key]});
+  }
+  console.log(list);
+  const response = await axios.post("http://localhost:6000/riot/add_follow", {
+    user: req.session.user.name,
+    list: list,
+  });
+  return res.redirect("/main");
+});
+
 
 app.post("/register", (req, res) => {
   if (req.body.username && req.body.password) {

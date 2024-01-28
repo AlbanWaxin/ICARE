@@ -18,16 +18,18 @@ def get_followed():
     players = {}
     for player in player_list:
         if player == None: return "No player", 400
-        sumid = requester.get_summoner(player['puuid'])['id']
+        sum = requester.get_summoner(player['puuid'])
+        sumid = sum['id']
         game = requester.is_in_game(sumid)
         infos = {
                 'name': player['gameName'],
                 'puuid': player['puuid'],
-                'ranks': {"sq":{"rank": None, "division" : None, "wins" : None, "losses" : None},
-                          "flex":{"rank": None, "division" : None, "wins" : None, "losses" : None},
-                          "tft":{"rank": None, "division" : None, "wins" : None, "losses" : None}},
+                'ranks': {"sq":{"rank": None, "division" : None, "wins" : None, "losses" : None, "lp": None},
+                          "flex":{"rank": None, "division" : None, "wins" : None, "losses" : None, "lp" : None},
+                          "tft":{"rank": None, "division" : None, "wins" : None, "losses" : None , "lp" : None}},
                 'url' : "https://u.gg/lol/profile/euw1/" + urllib_parse.quote(player['gameName']) + "-" + player['tagLine'],
-                'in_game': game != False
+                'in_game': game != False,
+                'icon': sum['profileIconId']
             }
         ranks = requester.get_ranks(sumid)
         id0,id1 = None,None
@@ -41,34 +43,38 @@ def get_followed():
             infos['ranks']["sq"]["division"] = "UNRANKED"
             infos['ranks']["sq"]["wins"] = 0
             infos['ranks']["sq"]["losses"] = 0
+            infos['ranks']["sq"]["lp"] = "0"
         else:
             infos['ranks']["sq"]["rank"]=ranks[id0]["tier"]
             infos['ranks']["sq"]["division"]=ranks[id0]["rank"]
             infos['ranks']["sq"]["wins"]=ranks[id0]["wins"]
             infos['ranks']["sq"]["losses"]=ranks[id0]["losses"]
+            infos['ranks']["sq"]["lp"]=ranks[id0]["leaguePoints"]
         if id1 == None :
             infos['ranks']["flex"]["rank"] = "UNRANKED"
             infos['ranks']["flex"]["division"] = "UNRANKED"
             infos['ranks']["flex"]["wins"] = 0
             infos['ranks']["flex"]["losses"] = 0
+            infos['ranks']["flex"]["lp"] = "0"
+
         else:
             infos['ranks']["flex"]["rank"]=ranks[id1]["tier"]
             infos['ranks']["flex"]["division"]=ranks[id1]["rank"]
             infos['ranks']["flex"]["wins"]=ranks[id1]["wins"]
             infos['ranks']["flex"]["losses"]=ranks[id1]["losses"]
-        print(game)
-        if game:
+            infos['ranks']["flex"]["lp"]=ranks[id1]["leaguePoints"]
+        if game and 'gameId' in game:
             ally,ennemies = [],[]
-            # find teamId for the player
+            # find teamId for the player           
             for participant in game['participants']:
                 if participant['puuid'] == player['puuid']:
                     teamId = participant['teamId']
                     break
             for participant in game['participants']:
                 if participant['teamId'] == teamId:
-                    ally.append({"champ": participant['championName'], "spell1": participant['spell1Id'], "spell2": participant['spell2Id'], "summoner": participant['summonerName']})
+                    ally.append({"champ": participant['championId'], "spell1": participant['spell1Id'], "spell2": participant['spell2Id'], "summoner": participant['summonerName']})
                 else:
-                    ennemies.append({"champ": participant['championName'], "spell1": participant['spell1Id'], "spell2": participant['spell2Id'], "summoner": participant['summonerName']})
+                    ennemies.append({"champ": participant['championId'], "spell1": participant['spell1Id'], "spell2": participant['spell2Id'], "summoner": participant['summonerName']})
             infos['game'] = {
                 "ally": ally,
                 "ennemies": ennemies,
