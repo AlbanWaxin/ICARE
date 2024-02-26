@@ -4,7 +4,7 @@ ICARE est un projet personnel en constante évolution, conçu comme une boîte �
 
 ## Fonctionnalités
 
-- **Suivi de Profil de League of Legends :** ICARE permet de suivre l'évolution du profil des joueurs de League of Legends, en utilisant l'API de RIOTGAME. Vous pouvez garder un œil sur vos statistiques, vos classements, et bien plus encore, directement depuis ICARE.
+- **Suivi de Profil de League of Legends :** ICARE permet de suivre l'évolution du profil des joueurs de League of Legends, en utilisant l'API de RIOTGAME. Vous pouvez garder un œil sur vos statistiques, vos classements, et bien plus encore, directement depuis ICARE. (Clé d'API Changée pas de risque de sécurité)
 
 - **Suivi de Sorties de Chapitres :** Grâce à un petit scrapping, ICARE est capable de suivre les sorties de chapitres d'œuvres que vous suivez. Que ce soit des mangas, des webtoons, des romans en ligne, ICARE vous notifie dès qu'un nouveau chapitre est disponible.
 
