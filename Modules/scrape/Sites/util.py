@@ -84,6 +84,7 @@ class Site:
         result = [2001] * len(self.webtoon_list)
         for i in range(len(self.webtoon_list)):
             webtoon = self.webtoon_list[i]
+            print('Webtoon : ', webtoon["url"],' ' , i , '/', len(self.webtoon_list))
             self.scraper.new_url(webtoon["url"])
             code = self.scraper.run_all()
             if code != 2001: result[i] = (webtoon["url"],code)

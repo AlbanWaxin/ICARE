@@ -9,7 +9,7 @@ export let sessionStorage= createCookieSessionStorage({
         path:"/",
         httpOnly:true,
         secure:false,
-        secrets:[process.env.SESSION_SECRET as string],
+        secrets:["PingouRuleTheWorld" as string],
     },
 });
 

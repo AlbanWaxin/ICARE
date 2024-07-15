@@ -446,7 +446,7 @@ function unfinish_drop_resume(url: string, e: any, state: string) {
 function new_webtoon(url: string, e: any) {
     console.log(e);
     e.preventDefault();
-    let elt:any = document.getElementById("hidden-add-form-");
+    let elt:any = document.getElementById("hidden-add-form");
         if (elt === null){
             return
         }
