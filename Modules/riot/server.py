@@ -1,112 +1,66 @@
 from flask import Flask, request
-from requester import Requester
+from Utils.player import Player
+from Utils.requester import Requester
 import json
 import urllib.parse as urllib_parse
+import asyncio
 
 app = Flask(__name__)
+players:list[Player] = []
 requester = Requester()
+
+
+with open('Files/players.json','r') as file:
+    data = json.load(file)
+    for player in data:
+        players.append(Player(identifier=player['puuid']))
+
+async def setup_players():
+    for player in players:
+        print("Setuping",player.identifier)
+        await player.setup(player.identifier)
+
+asyncio.run(setup_players())
 
 def check_origin(request):
     return request.remote_addr != '127.0.0.1'
 
+@app.route('/update',methods=['GET'])
+def update():
+    if check_origin(request):
+        return "Unauthorized", 401
+    for player in players:
+        player.update()
+    return "Updated", 200
 
 @app.route('/get_followed', methods=['POST'])
 def get_followed():
     if check_origin(request):
         return "Unauthorized", 401
-    player_list = json.loads(request.data.decode("utf-8"))
-    players = {}
-    for player in player_list:
-        if player == None: return "No player", 400
-        sum = requester.get_summoner(player['puuid'])
-        sumid = sum['id']
-        game = requester.is_in_game(sumid)
-        infos = {
-                'name': player['gameName'],
-                'puuid': player['puuid'],
-                'ranks': {"sq":{"rank": None, "division" : None, "wins" : None, "losses" : None, "lp": None},
-                          "flex":{"rank": None, "division" : None, "wins" : None, "losses" : None, "lp" : None},
-                          "tft":{"rank": None, "division" : None, "wins" : None, "losses" : None , "lp" : None}},
-                'url' : "https://u.gg/lol/profile/euw1/" + urllib_parse.quote(player['gameName']) + "-" + player['tagLine'],
-                'in_game': game != False,
-                'icon': sum['profileIconId']
-            }
-        ranks = requester.get_ranks(sumid)
-        id0,id1 = None,None
-        for rank in ranks:
-            if rank['queueType'] == "RANKED_SOLO_5x5":
-                id0 = ranks.index(rank)
-            if rank['queueType'] == "RANKED_FLEX_SR":
-                id1 = ranks.index(rank)
-        if id0 == None : 
-            infos['ranks']["sq"]["rank"] = "UNRANKED"
-            infos['ranks']["sq"]["division"] = "UNRANKED"
-            infos['ranks']["sq"]["wins"] = 0
-            infos['ranks']["sq"]["losses"] = 0
-            infos['ranks']["sq"]["lp"] = "0"
-        else:
-            infos['ranks']["sq"]["rank"]=ranks[id0]["tier"]
-            infos['ranks']["sq"]["division"]=ranks[id0]["rank"]
-            infos['ranks']["sq"]["wins"]=ranks[id0]["wins"]
-            infos['ranks']["sq"]["losses"]=ranks[id0]["losses"]
-            infos['ranks']["sq"]["lp"]=ranks[id0]["leaguePoints"]
-        if id1 == None :
-            infos['ranks']["flex"]["rank"] = "UNRANKED"
-            infos['ranks']["flex"]["division"] = "UNRANKED"
-            infos['ranks']["flex"]["wins"] = 0
-            infos['ranks']["flex"]["losses"] = 0
-            infos['ranks']["flex"]["lp"] = "0"
-
-        else:
-            infos['ranks']["flex"]["rank"]=ranks[id1]["tier"]
-            infos['ranks']["flex"]["division"]=ranks[id1]["rank"]
-            infos['ranks']["flex"]["wins"]=ranks[id1]["wins"]
-            infos['ranks']["flex"]["losses"]=ranks[id1]["losses"]
-            infos['ranks']["flex"]["lp"]=ranks[id1]["leaguePoints"]
-        if game and 'gameId' in game:
-            ally,ennemies = [],[]
-            # find teamId for the player           
-            for participant in game['participants']:
-                if participant['puuid'] == player['puuid']:
-                    teamId = participant['teamId']
-                    break
-            for participant in game['participants']:
-                if participant['teamId'] == teamId:
-                    ally.append({"champ": participant['championId'], "spell1": participant['spell1Id'], "spell2": participant['spell2Id'], "summoner": participant['summonerName']})
-                else:
-                    ennemies.append({"champ": participant['championId'], "spell1": participant['spell1Id'], "spell2": participant['spell2Id'], "summoner": participant['summonerName']})
-            infos['game'] = {
-                "ally": ally,
-                "ennemies": ennemies,
-                "gametype": game['gameType'],
-                "gamelength": game['gameLength'],
-            }
-        players[player['gameName']] = infos
-    return json.dumps(players), 200
-    
-@app.route('/start_follow', methods=['GET'])
-def start_follow():
-    if check_origin(request):
-        return "Unauthorized", 401
-    player = request.args.get('player')
-    return json.dumps(get_follow_data(player,True)[0]), 200
+    outputs = []
+    for player in players:
+        outputs.append({'player_info':player.identity.gameName,'status':player.status.export(player.identity.puuid)})
+    return json.dumps(outputs), 200
 
 @app.route('/add_follow', methods=['POST'])
 def add_follow():
     if check_origin(request):
         return "Unauthorized", 401
-    players = json.loads(request.data.decode("utf-8"))
-    print(players)
-    follows = []
-    for player in players:
-        data = get_follow_data(player['player'],False)
-        print("No player") if data[0] == "No player" else follows.append(data[0])
-    return  json.dumps(follows), 200
+    print(request)
+    print(request.data.decode('utf-8'))
+    params = json.loads(request.data.decode('utf-8'))
+    username = params['user']
+    tag = params['tag']
+    if (username,tag) not in [(player.identity.gameName,player.identity.tagLine) for player in players]:
+        players.append(Player(identifier=(username,tag)))
+        asyncio.run(save_player(players[-1]))
+    return "Added", 200
 
-def get_follow_data(player,main):
-    if player == None: return "No player", 400
-    puuid = requester.get_puuid(gameName=player.split('#')[0], tagLine=player.split('#')[1])['puuid']
-    return {"main": main, "puuid": puuid , "gameName": player.split('#')[0], "tagLine": player.split('#')[1], "id": requester.get_summoner(puuid)['id']},200
+async def save_player(player):
+    await player.setup(player.identifier)
+    player.update()
+    with open('Files/players.json','w') as file:
+        json.dump([{'puuid':player.identity.puuid} for player in players],file)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0' ,port=5200)

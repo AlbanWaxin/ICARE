@@ -1,0 +1,28 @@
+.site-bar{
+    background-color: #212529;
+    position: sticky;
+    top: 0;
+    width: 100%;
+    height: 10vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.site-bar h1{
+    color: white;
+    margin:0;
+}
+
+.site-bar-logo {
+    height: 100%;
+}
+
+.site-bar-logo img{
+    height: 100%;
+}
+
+body{
+    background-color: #131916;
+    margin: 0;
+}

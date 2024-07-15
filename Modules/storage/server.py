@@ -277,6 +277,7 @@ def read_user_file(username, password):
         with open('users.json', 'r') as f:
             users = json.load(f)
             for user in users:
+                print(user['username'], user['password'])
                 if user['username'] == username and user['password'] == password:
                     return True
             return False       

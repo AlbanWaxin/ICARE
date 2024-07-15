@@ -15,7 +15,7 @@ def check_origin(request):
 
 def routing_to_site(url):
     
-    if url.startswith('https://manhuascan.io/'):
+    if url.startswith('https://manhuascan.io/') or url.startswith('https://kaliscan.io') or url.startswith('https://manhuascan.net/'):
         return manhuascan
     if url.startswith('https://1st-kissmanga.net/'):
         return fstkissmanga
@@ -96,6 +96,7 @@ def add_webtoons():
     else:
         if len(request.data) == 0: return 'No data', 400
         url_list = json.loads(request.data.decode("utf-8"))['url_list']
+        print(url_list)
         if url_list == None: return 'No url', 400
         results = [2001] * len(url_list)
         for url in url_list:
@@ -106,6 +107,7 @@ def add_webtoons():
             code = site.add_webtoon(url)
             results[url_list.index(url)] = (url,code)
             (code), 400
+        print(results)
         return str(results), 200
 
 

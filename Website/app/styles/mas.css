@@ -1,0 +1,22 @@
+.not_up_to_date {
+  background-color: #8706f1;
+}
+.up_to_date {
+  background-color: #6c757d;
+}
+.up_innactive {
+  background-color: #ff8c15;
+}
+.finished {
+  background-color: #198754;
+}
+.dropped {
+  background-color: #dc3545;
+}
+.innactive {
+  background-color: #212529;
+}
+
+.add{
+  top:10vh;
+}

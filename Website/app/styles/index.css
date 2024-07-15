@@ -1,0 +1,50 @@
+.box-layout{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    height: 12vh;
+    margin-top: 20px;
+    border: 1px;
+    border-radius: 3%;
+    align-items: center;
+    justify-content: center;
+}
+
+.section-box{
+    display: flex;
+    flex-direction: column;
+    height: 99%;
+    margin-left: 4vh;
+    margin-right: 4vh;
+    margin-top: 0.2%;
+    margin-bottom: 0.2%;
+    border: 1px solid ;
+    border-color: #131916;
+    border-radius: 5%;
+    align-items: center;
+    border: 1px;
+}
+
+.section-box:hover{
+    background-color: #2a2e33;
+}
+
+.section-image{
+    width: 100%;
+    height: 80%;
+    border-radius: 50%;
+}
+
+.section-image img{
+    width: 100%;
+    height: 100%;
+    
+}
+
+.section-title{
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    height: 20%;
+}

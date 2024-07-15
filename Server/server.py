@@ -121,30 +121,15 @@ def is_registered():
 def followed():
     params = request.args
     print(params)
-    res = requests.get(local + storage + "/riot/follow", params=params)
-    res = requests.post(local + riot + "/get_followed", data=res.text)
+    res = requests.post(local + riot + "/get_followed")
     res_json = json.loads(res.text)
     return json.dumps(res_json), 200
-
-@app.route('/riot/start_follow', methods=['GET'])
-def start_follow():
-    params = request.args
-    print(params)
-    res = requests.get(local + riot + "/start_follow", params={'player': params.get('player')})
-    res = requests.post(local + storage + "/riot/start_follow", data=json.dumps({'user':params.get('user'),'riot':res.text}))
-    return str(res.status_code), 200
 
 @app.route('/riot/add_follow', methods=['POST'])
 def add_follow():
     params = json.loads(request.data.decode('utf-8'))
     print(params)
-    print(params['list'])
-    players = []
-    for player in range(len(params['list'])):
-        players.append({"player": params['list'][player]["player" + str(player + 1)]})
-    print(players)
-    res = requests.post(local + riot + "/add_follow", data=json.dumps(players))
-    res = requests.post(local + storage + "/riot/add_follow", data=json.dumps({'user':params['user'],'riot':res.text}))
+    res = requests.post(local + riot + "/add_follow", data=json.dumps(params))
     return str(res.status_code), 200
 
 
