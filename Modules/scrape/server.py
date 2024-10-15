@@ -42,7 +42,7 @@ def get_all():
         return 'You are not allowed to contact me',403
     else:
         print(len(kaliscan.get_webtoon_list()))
-        return kaliscan.get_webtoon_list() + fstkissmanga.get_webtoon_list(),200
+        return kaliscan.get_webtoon_list(),200
     
 @app.route('/get_all_r', methods=['GET'])
 def get_all_r():
@@ -93,20 +93,6 @@ def add_webtoon():
         if (code//2000 != 1 and code%2000 < 1000) : return str(code), 400
         return 'Added',200
 
-@app.route('/add_webtoon', methods=['POST'])
-def add_webtoon():
-    if check_origin(request):
-        return 'You are not allowed to contact me',403
-    else:
-        if len(request.data) == 0: return 'No data', 400
-        url = json.loads(request.data.decode("utf-8"))[0]['url']
-        if url == None: return 'No url', 400
-        site = routing_to_site(url)
-        if site == None: return 'Site not supported', 400
-        code = site.add_webtoon(url)
-        if (code//2000 != 1 and code%2000 < 1000) : return str(code), 400
-        return 'Added',200
-
 @app.route('/add_webtoons', methods=['POST'])
 def add_webtoons():
     if check_origin(request):
@@ -130,4 +116,4 @@ def add_webtoons():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0' ,port=5000)
+    app.run(host='127.0.0.1' ,port=5000)

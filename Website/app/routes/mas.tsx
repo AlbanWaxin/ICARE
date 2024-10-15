@@ -9,6 +9,7 @@ import {
 } from "@remix-run/node";
 
 export let action = async ({ request }: ActionFunctionArgs) => {
+    console.log("form");
     const formData = await request.formData();
     const webtoon:any = formData.get("webtoon");
     const user = formData.get("user");

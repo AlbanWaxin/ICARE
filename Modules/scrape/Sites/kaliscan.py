@@ -68,7 +68,9 @@ class KaliScan_Scrapper(Scraper):
             value = ''.join(matches)
             if not value.lower().startswith('chapter'):
                 value = "Chapter " + ''.join(re.findall(r'\d+', value))
+            value = value.replace("Chapter ","Chp. ")
             self.chapter_list[self.chapter_list.index(chapter)]['chapter'] = value
+            print(value)
         return 2001
     
     def get_image(self):

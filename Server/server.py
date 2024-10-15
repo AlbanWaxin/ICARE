@@ -34,9 +34,12 @@ def mas():
             if webtoon['url'] == scraped_webtoon['url']:
                 if webtoon['state'] != 'finished' and webtoon['state'] != 'dropped':
                     is_innactive = False
-                    if (float(scraped_webtoon['chapter_list'][0]["chapter"].strip("Chapter ")) - len(scraped_webtoon['chapter_list'])) > - 10:
+                    print("First Chapter :" ,scraped_webtoon['chapter_list'][0]["chapter"], " Webtoon : ", scraped_webtoon['name'])
+                    if scraped_webtoon['chapter_list'][0]["chapter"] in ["Chp. "," Chp. "]:
+                        continue
+                    if (float(scraped_webtoon['chapter_list'][0]["chapter"].strip("Chp. ")) - len(scraped_webtoon['chapter_list'])) > - 10:
                         is_innactive = isinnactive(scraped_webtoon['chapter_list'][0]['date'])
-                    if webtoon['last_chapter_read'] != float(scraped_webtoon['chapter_list'][0]['chapter'].strip("Chapter ")):
+                    if webtoon['last_chapter_read'] != float(scraped_webtoon['chapter_list'][0]['chapter'].strip("Chp. ")):
                         #print(webtoon['last_chapter_read'], scraped_webtoon['chapter_list'][0]['chapter'].strip("Chapter "), scraped_webtoon['name'])
                         webtoon['state'] = 'up_innactive' if is_innactive  else'not_up_to_date'
                     else :
@@ -136,4 +139,4 @@ def add_follow():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=6000)
+    app.run(host='127.0.0.1', port=6000)

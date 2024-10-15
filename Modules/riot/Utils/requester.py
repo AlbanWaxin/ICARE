@@ -3,7 +3,7 @@ from Utils.riot_types import *
 
 class Requester:
     def __init__(self):
-        self.api_key = "RGAPI-2772c942-51bd-4a2c-b288-2099a8fc0792"
+        self.api_key = "RGAPI-2432a617-da97-4f67-8326-992841c4ce31"
         self.headers = {
             "X-Riot-Token": self.api_key,
         }

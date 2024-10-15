@@ -261,17 +261,27 @@ const Chapter_list_Up_button = (props: Chapter_list_Up_buttonProps) => {
         <div className="w-full flew flex-row">
             <select
                 className="w-1/2 h-1/2 text-white bg-[#222222] border-2 border-white rounded-md p-1 text-center font-bold m-0 pr-2 mt-6"
-                defaultValue={"Chapter " + String(selectedvalue)}
                 onChange={(e) => {
                     setSelected(e.target.value);
                 }}
             >
                 {props.list.map((chapter, index) => {
-                    return (
-                        <option key={index} value={chapter.chapter}>
-                            {chapter.chapter}
-                        </option>
-                    );
+                    //console.log(chapter.chapter , "Chp." + String(selectedvalue));
+                    if (chapter.chapter == "Chp. " + String(selectedvalue)){
+                         console.log('found it');
+                         return (
+                             <option key={index} value={chapter.chapter} selected>
+                                 {chapter.chapter}
+                             </option>
+                         );
+                    }
+                    else {
+                        return (
+                            <option key={index} value={chapter.chapter}>
+                                {chapter.chapter}
+                            </option>
+                        );
+                   }
                 })}
             </select>
 

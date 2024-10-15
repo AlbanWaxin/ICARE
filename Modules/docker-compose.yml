@@ -1,0 +1,8 @@
+version: '3.1'
+services:
+  storage:
+    build: ./storage
+    ports:
+      - "5100:5100"
+    network_mode: "host"
+
